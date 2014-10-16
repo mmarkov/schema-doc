@@ -2,15 +2,20 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet">
     <title></title>
 </head>
 <body>
-    <table>
-        <thead></thead>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Table</th><th>Comment</th>
+            </tr>
+        </thead>
         <tbody>
             {% for item in table_pages %}
             <tr>
-                <td>{{ item.table }}</td><td>{{ item.url }}</td>
+                <td><a href="{{ item.url }}">{{ item.table }}</a></td><td>{{ item.url }}</td>
             </tr>
             {% endfor %}
         </tbody>

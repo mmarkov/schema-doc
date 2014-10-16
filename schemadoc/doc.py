@@ -1,8 +1,10 @@
 from optparse import OptionParser
 import os
+from pkg_resources import resource_filename
 
 from schemaobject.connection import build_database_url
 from schemaobject import SchemaObject
+import shutil
 from schemadoc.version import  __version__
 from schemadoc.doc_generator import DocGenerator
 
@@ -11,6 +13,10 @@ def _doc(url, folder):
     if not schema.selected:
         raise Exception()
     db = schema.selected
+    # copy lib into target folder
+    lib_folder = os.path.join(resource_filename(__name__, 'static'), 'lib')
+    output_lib_folder = os.path.join(folder, 'lib')
+    shutil.copytree(src=lib_folder, dst=output_lib_folder)
     generator = DocGenerator(db, folder)
     generator.generate_documentation()
 

@@ -29,8 +29,8 @@ class DocGenerator(object):
     def _generate_table_page(self, table_name):
         table_page = self._render_table_page(table_name)
         table_page_path = os.path.join(self._tables_folder, "%s.html"%table_name)
-        with open(table_page_path, "wt") as fh:
-            fh.write(table_page)
+        with open(table_page_path, "wt") as f:
+            f.write(table_page)
         url = os.path.relpath(table_page_path, self._folder)
         return url
 
@@ -41,5 +41,5 @@ class DocGenerator(object):
     def _generate_home_page(self, table_pages):
         home_page = self._render_home_page(table_pages)
         home_page_path = os.path.join(self._folder, 'index.html')
-        with open(home_page_path, "wt") as fh:
-            fh.write(home_page)
+        with open(home_page_path, "wt") as f:
+            f.write(home_page)
