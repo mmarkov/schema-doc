@@ -2,10 +2,18 @@ from optparse import OptionParser
 import os
 
 from schemaobject.connection import build_database_url
+from schemaobject import SchemaObject
 from schemadoc.version import  __version__
+from schemadoc.doc_generator import DocGenerator
 
 def _doc(url, folder):
-    raise NotImplementedError()
+    schema = SchemaObject(url, 'utf8')
+    if not schema.selected:
+        raise Exception()
+    db = schema.selected
+    generator = DocGenerator(db, folder)
+    generator.generate_documentation()
+
 
 def main(argv):
 
@@ -24,6 +32,7 @@ def main(argv):
     option_port = 'port'
     default_port = 3306
     option_folder = 'folder'
+    option_database = 'database'
 
     parser = OptionParser(usage="usage: %prog [options]",
                           version="schemadoc v%s" % (__version__,))
@@ -35,6 +44,7 @@ def main(argv):
                       dest=option_password, action='store', default=default_password)
     parser.add_option('-P', help='port used to connect (default %s)' % (default_port,),
                       dest=option_port, action='store', default=default_port)
+    parser.add_option('-D', help='provide database name (required)', dest=option_database, action='store')
     parser.add_option('-o', help='Output folder',
                       dest=option_folder, action='store')
 
@@ -46,11 +56,17 @@ def main(argv):
         return 1
 
     if not opts.folder:
-        print('parameter -o is required', file=os.sys.stdout)
+        print('parameter -o folder is required', file=os.sys.stdout)
         parser.print_help()
         return 1
 
-    url = build_database_url(host=opts.host, username=opts.user, password=opts.password)
+    if not opts.database:
+        print('parameter -D database is required', file=os.sys.stdout)
+        parser.print_help()
+        return 1
+
+
+    url = build_database_url(host=opts.host, username=opts.user, password=opts.password, database=opts.database)
     folder = opts.folder
     try:
         if not os.path.exists(folder):
