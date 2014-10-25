@@ -13,9 +13,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in table_pages %}
+            {% for item in db.tables %}
             <tr>
-                <td><a href="{{ item.url }}">{{ item.table }}</a></td><td>{{ item.url }}</td>
+                <td><a href="{{ db.tables[item].page_url }}">{{ db.tables[item].name }}</a></td><td>{{  db.tables[item].page_url }}</td>
             </tr>
             {% endfor %}
         </tbody>
