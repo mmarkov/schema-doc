@@ -1,4 +1,5 @@
 import os
+from graphviz import Digraph
 from jinja2 import Environment, PackageLoader
 
 
@@ -11,7 +12,7 @@ class DocGenerator(object):
         object.__init__(self)
 
     def generate_documentation(self):
-        table_pages = [];
+        table_pages = []
 
         if not os.path.exists(self._tables_folder):
             os.makedirs(self._tables_folder)
@@ -43,3 +44,7 @@ class DocGenerator(object):
         home_page_path = os.path.join(self._folder, 'index.html')
         with open(home_page_path, "wt") as f:
             f.write(home_page)
+
+    def _render_main_diagram(self):
+        template = self._env.get_template('main_diagram.gv')
+        graph = template.render(db = self._db)

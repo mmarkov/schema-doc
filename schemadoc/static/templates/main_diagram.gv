@@ -1,0 +1,19 @@
+digraph G {
+  node [shape=plaintext]
+  {% for table in tables %}
+  {{ table.name }} [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR>
+        <TD COLSPAN="2">{{ table.name }}</TD>
+      </TR>
+    {% for column in table.columns %}
+      <TR>
+        <TD PORT="{{ table.name_column.name }}">{{ column.name }}</TD>
+        <TD>{{ column.type }}</TD>
+      </TR>
+    {% endfor %}
+    </TABLE>
+  >];
+  {% endfor %}
+
+}

@@ -1,3 +1,4 @@
 PyMySQL==0.6.2
 jinja2==2.7.3
 -e git+git@github.com:mmarkov/schema-object.git#egg=schema-object
+-e git+git@github.com:mmarkov/pygraphviz.git#egg=pygraphviz
