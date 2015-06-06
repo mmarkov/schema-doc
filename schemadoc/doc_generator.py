@@ -1,5 +1,6 @@
 import os
 from jinja2 import Environment, PackageLoader
+import pygraphviz
 
 
 class DocGenerator(object):
@@ -22,7 +23,17 @@ class DocGenerator(object):
             table.page_url = self._generate_table_page(table)
 
         # generate index page
+        self._render_main_diagram()
         self._generate_home_page()
+
+    def _write_to_file(self, content, to_file):
+        with open(to_file, "wt") as f:
+            f.write(content)
+
+    def _get_path_and_url(self, filename):
+        path = os.path.join(self._folder, filename)
+        url = os.path.relpath(path, self._folder)
+        return (path, url)
 
     def _render_table_page(self, table):
         template = self._env.get_template('table_page.html')
@@ -37,10 +48,9 @@ class DocGenerator(object):
         """
         table_name = table.name
         table_page = self._render_table_page(table)
-        table_page_path = os.path.join(self._tables_folder, "%s.html"%table_name)
-        with open(table_page_path, "wt") as f:
-            f.write(table_page)
-        url = os.path.relpath(table_page_path, self._folder)
+        table_filename = os.path.join('tables', "%s.html"%table_name)
+        table_page_path, url  = self._get_path_and_url(table_filename)
+        self._write_to_file(content=table_page, to_file=table_page_path)
         return url
 
     def _render_home_page(self):
@@ -49,10 +59,16 @@ class DocGenerator(object):
 
     def _generate_home_page(self):
         home_page = self._render_home_page()
-        home_page_path = os.path.join(self._folder, 'index.html')
-        with open(home_page_path, "wt") as f:
-            f.write(home_page)
+        home_page_path, url = self._get_path_and_url('index.html')
+        self._write_to_file(content=home_page, to_file=home_page_path)
 
     def _render_main_diagram(self):
         template = self._env.get_template('main_diagram.gv')
-        graph = template.render(db = self._db)
+        graph = template.render(db=self._db)
+        print(graph)
+        g=pygraphviz.AGraph(graph)
+        main_diagram_path, url = self._get_path_and_url('main_diagram.svg')
+        g.draw(path=main_diagram_path, prog='dot', format='svg')
+        return url
+
+

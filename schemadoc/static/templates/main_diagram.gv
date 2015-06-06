@@ -1,15 +1,15 @@
 digraph G {
   node [shape=plaintext]
-  {% for table in tables %}
-  {{ table.name }} [label=<
+  {% for table in db.tables %}
+  {{ db.tables[table].name }} [label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
       <TR>
-        <TD COLSPAN="2">{{ table.name }}</TD>
+        <TD COLSPAN="2">{{ db.tables[table].name }}</TD>
       </TR>
-    {% for column in table.columns %}
+    {% for column in db.tables[table].columns %}
       <TR>
-        <TD PORT="{{ table.name_column.name }}">{{ column.name }}</TD>
-        <TD>{{ column.type }}</TD>
+        <TD PORT="{{ db.tables[table].columns[column].name }}">{{ db.tables[table].columns[column].name }}</TD>
+        <TD>{{ db.tables[table].columns[column].type }}</TD>
       </TR>
     {% endfor %}
     </TABLE>

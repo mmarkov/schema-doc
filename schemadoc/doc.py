@@ -1,6 +1,7 @@
 from optparse import OptionParser
 import os
 from pkg_resources import resource_filename
+import sys
 
 from schemaobject.connection import build_database_url
 from schemaobject import SchemaObject
@@ -21,14 +22,15 @@ def _doc(url, folder):
     generator.generate_documentation()
 
 
-def main(argv = None):
+def main():
 
     """
     Entry point which parse parameters and run generation routine
 
-    :param argv: list with calling parameters except actual executable path
     :return: exit_code which will be passed to OS
     """
+    argv = sys.argv[1:]
+
     option_host = 'host'
     default_host = 'localhost'
     option_user = 'user'
