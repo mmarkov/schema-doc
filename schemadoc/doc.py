@@ -21,7 +21,7 @@ def _doc(url, folder):
     generator.generate_documentation()
 
 
-def main(argv):
+def main(argv = None):
 
     """
     Entry point which parse parameters and run generation routine
@@ -57,7 +57,7 @@ def main(argv):
 
     opts, args = parser.parse_args(argv)
 
-    if len(argv) == 0:
+    if not argv or len(argv) == 0:
         parser.print_help()
         return 1
 
