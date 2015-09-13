@@ -16,4 +16,9 @@ digraph G {
   >];
   {% endfor %}
 
+  {% for table in db.tables %}
+    {% for fk in db.tables[table].foreign_keys %}
+
+    {% endfor %}
+  {% endfor %}
 }

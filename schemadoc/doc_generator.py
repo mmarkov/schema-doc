@@ -1,32 +1,45 @@
 import os
 from jinja2 import Environment, PackageLoader
 import pygraphviz
+import sqlalchemy
+from collections import defaultdict
+from dotmap import DotMap
 
 
 class DocGenerator(object):
     def __init__(self, db, folder):
+        """
+
+        :param db: sqlalchemy engine
+        :param folder: output folder (already created with libraries already copied)
+        """
         self._db = db
+        self._meta = None
         self._folder = folder
         self._tables_folder = os.path.join(self._folder, 'tables')
         self._env = Environment(loader=PackageLoader('schemadoc', 'static/templates'))
         object.__init__(self)
 
     def generate_documentation(self):
-        table_pages = []
+        table_pages = defaultdict(DotMap)
 
         if not os.path.exists(self._tables_folder):
             os.makedirs(self._tables_folder)
+        # reflect database
+        self._meta = sqlalchemy.MetaData()
+        self._meta.reflect(bind=self._db)
         # generate pages for each table
-        for table_name in self._db.tables:
-            table = self._db.tables[table_name]
+        for table_name in self._meta.tables:
+            table = self._meta.tables[table_name]
             # store table page url for future references
-            table.page_url = self._generate_table_page(table)
+            table_pages[table_name].page_url = self._generate_table_page(table)
 
         # generate index page
-        self._render_main_diagram()
-        self._generate_home_page()
+        main_diagram_url = self._render_main_diagram(table_pages)
+        self._generate_home_page(table_pages, main_diagram_url)
 
-    def _write_to_file(self, content, to_file):
+    @staticmethod
+    def _write_to_file(content, to_file):
         with open(to_file, "wt") as f:
             f.write(content)
 
@@ -49,7 +62,7 @@ class DocGenerator(object):
         table_name = table.name
         table_page = self._render_table_page(table)
         table_filename = os.path.join('tables', "%s.html"%table_name)
-        table_page_path, url  = self._get_path_and_url(table_filename)
+        table_page_path, url = self._get_path_and_url(table_filename)
         self._write_to_file(content=table_page, to_file=table_page_path)
         return url
 
