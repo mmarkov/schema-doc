@@ -1,5 +1,7 @@
 __author__ = 'maksymmarkov'
 
+import os
+import shutil
 import unittest
 import schemadoc
 from unittest.mock import patch
@@ -7,6 +9,7 @@ from unittest.mock import patch
 
 
 class ParametersTestCase(unittest.TestCase):
+
 
     @patch('sys.argv')
     @patch('optparse.OptionParser.print_help')

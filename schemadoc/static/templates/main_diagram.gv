@@ -8,8 +8,8 @@ digraph G {
       </TR>
     {% for column in db.tables[table].columns %}
       <TR>
-        <TD PORT="{{ db.tables[table].columns[column].name }}">{{ db.tables[table].columns[column].name }}</TD>
-        <TD>{{ db.tables[table].columns[column].type }}</TD>
+        <TD PORT="{{ column.name }}">{{ column.name }}</TD>
+        <TD>Type TBD</TD>
       </TR>
     {% endfor %}
     </TABLE>
@@ -18,7 +18,9 @@ digraph G {
 
   {% for table in db.tables %}
     {% for fk in db.tables[table].foreign_keys %}
-
+        {{fk.parent.table.name}}:
+            {{fk.parent.name}}->
+            {{ fk.column.table.name }}:{{ fk.column.name }} [arrowhead=normal dir=forward arrowtail=none];
     {% endfor %}
   {% endfor %}
 }

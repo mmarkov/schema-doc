@@ -70,15 +70,14 @@ class DocGenerator(object):
         template = self._env.get_template('home_page.html')
         return template.render(db=self._db)
 
-    def _generate_home_page(self):
+    def _generate_home_page(self, table_pages, main_diagram_url):
         home_page = self._render_home_page()
         home_page_path, url = self._get_path_and_url('index.html')
         self._write_to_file(content=home_page, to_file=home_page_path)
 
-    def _render_main_diagram(self):
+    def _render_main_diagram(self, table_pages):
         template = self._env.get_template('main_diagram.gv')
-        graph = template.render(db=self._db)
-        print(graph)
+        graph = template.render(db=self._meta, table_pages=table_pages)
         g=pygraphviz.AGraph(graph)
         main_diagram_path, url = self._get_path_and_url('main_diagram.svg')
         g.draw(path=main_diagram_path, prog='dot', format='svg')

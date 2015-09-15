@@ -6,6 +6,7 @@ import shutil
 import sqlalchemy
 from schemadoc.version import  __version__
 from schemadoc.doc_generator import DocGenerator
+import traceback
 
 def _doc(url, folder):
     engine = sqlalchemy.create_engine(url)
@@ -70,6 +71,7 @@ def main():
         _doc(url, folder)
     except Exception as e:
         print(repr(e), file=os.sys.stdout)
+        traceback.print_last()
         return 1
 
     print("Documentation is generated in folder %s" % (folder,), file=os.sys.stdout)
