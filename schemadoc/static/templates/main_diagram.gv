@@ -9,7 +9,7 @@ digraph G {
     {% for column in db.tables[table].columns %}
       <TR>
         <TD PORT="{{ column.name }}">{{ column.name }}</TD>
-        <TD>Type TBD</TD>
+        <TD>{{ column.type if not column.type.__class__.__name__ == 'NullType' else ''}}</TD>
       </TR>
     {% endfor %}
     </TABLE>

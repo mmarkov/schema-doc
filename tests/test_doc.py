@@ -7,7 +7,6 @@ import schemadoc
 from unittest.mock import patch
 
 
-
 class ParametersTestCase(unittest.TestCase):
 
 
